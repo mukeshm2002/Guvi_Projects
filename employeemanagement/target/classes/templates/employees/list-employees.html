@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee List</title>
+    <link rel="icon" type="image/x-icon" href="logo.jpg">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    /* Container for Responsive Design */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Table Styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Button Styles */
+    .button {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+    .button-view{
+        background-color:yellow;
+        color:black;
+        border:none;
+    }
+    .button-view:hover{
+        background-color:yellowgreen;
+    }
+
+    .button-edit {
+        background-color: #28a745; /* Green */
+        color: white;
+        border: none;
+    }
+
+    .button-edit:hover {
+        background-color: #218838;
+    }
+
+    .button-delete {
+        background-color: #dc3545; /* Red */
+        color: white;
+        border: none;
+    }
+
+    .button-delete:hover {
+        background-color: #c82333;
+    }
+
+    /* Form Styles */
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 20px auto;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Error Message Styles */
+    .error {
+        color: red;
+        font-size: 14px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 8px;
+        }
+
+        .button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        form {
+            padding: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+    }
+</style>
+<body>
+<div class="container">
+    <h1>Employee List</h1>
+    <img src="logo.jpg" alt="logo">
+    <a th:href="@{/employees/add}" class="button button-edit">Add Employee</a>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${employee.department}"></td>
+            <td>
+                <a th:href="@{/employees/view/{id}(id=${employee.id})}" class="button button-view">View</a>
+                <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="button button-edit">Edit</a>
+                <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="button button-delete">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    // Frontend Validation for Add/Edit Employee Forms
+    document.addEventListener("DOMContentLoaded", function () {
+        const forms = document.querySelectorAll("form");
+
+        forms.forEach(form => {
+            form.addEventListener("submit", function (event) {
+                let isValid = true;
+
+                // Validate Name
+                const nameInput = form.querySelector("input[name='name']");
+                if (!nameInput.value.trim()) {
+                    showError(nameInput, "Name is required.");
+                    isValid = false;
+                }
+
+                // Validate Email
+                const emailInput = form.querySelector("input[name='email']");
+                if (!emailInput.value.trim()) {
+                    showError(emailInput, "Email is required.");
+                    isValid = false;
+                } else if (!validateEmail(emailInput.value.trim())) {
+                    showError(emailInput, "Please enter a valid email address.");
+                    isValid = false;
+                }
+
+                // Validate Department
+                const departmentInput = form.querySelector("input[name='department']");
+                if (!departmentInput.value.trim()) {
+                    showError(departmentInput, "Department is required.");
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    event.preventDefault(); // Prevent form submission if validation fails
+                }
+            });
+        });
+
+        // Function to display error messages
+        function showError(input, message) {
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "error";
+            errorDiv.textContent = message;
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+
+            // Remove error message after 3 seconds
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
+        }
+
+        // Function to validate email format
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+    });
+</script>
+</body>
+</html>
