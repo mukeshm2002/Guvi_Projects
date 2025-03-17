@@ -1,0 +1,234 @@
+# **Project Report: Patient Medicine and Appointment System**
+
+## **1. Introduction**
+
+The **Patient Medicine and Appointment System** is a web-based application designed to manage patient information, appointments, and medications. It provides an efficient way for healthcare providers to register patients, schedule appointments, and manage prescribed medications. The system is built using **Spring Boot** for the backend, **Thymeleaf** for the frontend, and **MySQL** for the database.
+
+---
+
+## **2. Objectives**
+
+The primary objectives of this project are:
+- To provide a centralized platform for managing patient information.
+- To enable healthcare providers to schedule and manage appointments.
+- To allow healthcare providers to prescribe and manage medications for patients.
+- To ensure data security and privacy for patient records.
+
+---
+
+## **3. Technologies Used**
+
+### **Backend**
+- **Spring Boot**: A Java-based framework for building web applications.
+- **Spring Data JPA**: For database operations and entity management.
+- **MySQL**: A relational database for storing patient, appointment, and medication data.
+
+### **Frontend**
+- **Thymeleaf**: A server-side template engine for rendering HTML pages.
+- **Bootstrap**: A CSS framework for responsive and modern UI design.
+- **JavaScript**: For client-side interactivity.
+
+### **Tools**
+- **IntelliJ IDEA**: Integrated Development Environment (IDE) for Java development.
+- **Maven**: Build automation and dependency management tool.
+- **Postman**: For testing RESTful APIs.
+
+---
+
+## **4. Features**
+
+### **Patient Management**
+- **Patient Registration**: Register new patients with details such as name, email, contact details, and medical history.
+- **View Patients**: Display a list of all registered patients.
+- **Edit Patient**: Update patient details.
+- **Delete Patient**: Remove a patient from the system.
+
+### **Appointment Management**
+- **Book Appointment**: Schedule appointments for patients with a specific doctor and time.
+- **View Appointments**: Display a list of all scheduled appointments.
+- **Cancel Appointment**: Cancel an existing appointment.
+
+### **Medication Management**
+- **Add Medication**: Prescribe new medications for patients.
+- **View Medications**: Display a list of all prescribed medications.
+- **Edit Medication**: Update medication details.
+- **Delete Medication**: Remove a medication from the system.
+
+---
+
+## **5. System Design**
+
+### **Database Schema**
+The database consists of the following tables:
+1. **Patient**: Stores patient information.
+2. **Appointment**: Stores appointment details with a foreign key reference to the `Patient` table.
+3. **Medication**: Stores medication details with a foreign key reference to the `Patient` table.
+
+### **Entity-Relationship Diagram (ERD)**
+```plaintext
++----------------+       +----------------+       +----------------+
+|    Patient     |       |   Appointment  |       |   Medication   |
++----------------+       +----------------+       +----------------+
+| id (PK)        |<------| patient_id (FK)|       | id (PK)        |
+| name           |       | id (PK)        |       | medicationName |
+| email          |       | doctorName     |       | dosage         |
+| contactDetails |       | appointmentTime|       | patient_id (FK)|
+| medicalHistory |       +----------------+       +----------------+
++----------------+
+```
+
+---
+
+## **6. Implementation**
+
+### **Backend**
+- **Spring Boot Controllers**: Handle HTTP requests and responses.
+- **Spring Data JPA Repositories**: Perform CRUD operations on the database.
+- **Service Layer**: Implements business logic for patient, appointment, and medication management.
+
+### **Frontend**
+- **Thymeleaf Templates**: Render dynamic HTML pages.
+- **Bootstrap**: Provides a responsive and modern UI.
+- **JavaScript**: Enhances interactivity on the client side.
+
+---
+
+## **7. Challenges Faced**
+
+1. **Data Validation**: Ensuring that all input fields are validated both on the client and server sides.
+2. **Database Relationships**: Managing one-to-many relationships between `Patient`, `Appointment`, and `Medication` entities.
+3. **UI/UX Design**: Creating a user-friendly interface that is both functional and visually appealing.
+
+---
+
+## **8. Future Enhancements**
+
+1. **User Authentication**: Implement login and registration for healthcare providers.
+2. **Email Notifications**: Send email reminders for upcoming appointments.
+3. **Search and Filter**: Add search and filter functionality for patients, appointments, and medications.
+4. **Mobile App**: Develop a mobile application for easier access to the system.
+
+---
+
+## **9. Conclusion**
+
+The **Patient Medicine and Appointment System** is a robust and scalable solution for managing patient information, appointments, and medications. It simplifies the workflow for healthcare providers and ensures that patient data is securely managed. With future enhancements, the system can be further improved to meet the evolving needs of healthcare providers.
+
+---
+
+## **10. Screenshots**
+
+### **Home Page**
+![Home Page](images/home.png)
+
+### **Patient Registration**
+![Patient Registration](images/register.png)
+
+### **Appointment Booking**
+![Appointment Booking](images/book-appointment.png)
+
+### **Medication List**
+![Medication List](images/medication-list.png)
+
+---
+
+## **11. References**
+
+- **Spring Boot Documentation**: [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- **Thymeleaf Documentation**: [https://www.thymeleaf.org/documentation.html](https://www.thymeleaf.org/documentation.html)
+- **Bootstrap Documentation**: [https://getbootstrap.com/docs/](https://getbootstrap.com/docs/)
+
+---
+
+## **12. Appendix**
+
+### **Source Code**
+The source code for this project is available on GitHub:  
+[GitHub Repository Link](#)
+
+### **Database Script**
+```sql
+CREATE TABLE Patient (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    contactDetails VARCHAR(255) NOT NULL,
+    medicalHistory TEXT
+);
+
+CREATE TABLE Appointment (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    doctorName VARCHAR(255) NOT NULL,
+    appointmentTime DATETIME NOT NULL,
+    patient_id BIGINT,
+    FOREIGN KEY (patient_id) REFERENCES Patient(id)
+);
+
+CREATE TABLE Medication (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    medicationName VARCHAR(255) NOT NULL,
+    dosage VARCHAR(255) NOT NULL,
+    patient_id BIGINT,
+    FOREIGN KEY (patient_id) REFERENCES Patient(id)
+);
+```
+
+---
+
+patient-medicine-appointment-system/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           ├── controller/
+│   │   │           │   ├── PatientController.java
+│   │   │           │   ├── AppointmentController.java
+│   │   │           │   └── MedicationController.java
+│   │   │           ├── model/
+│   │   │           │   ├── Patient.java
+│   │   │           │   ├── Appointment.java
+│   │   │           │   └── Medication.java
+│   │   │           ├── repository/
+│   │   │           │   ├── PatientRepository.java
+│   │   │           │   ├── AppointmentRepository.java
+│   │   │           │   └── MedicationRepository.java
+│   │   │           ├── service/
+│   │   │           │   ├── PatientService.java
+│   │   │           │   ├── AppointmentService.java
+│   │   │           │   └── MedicationService.java
+│   │   │           └── PatientMedicineAppointmentSystemApplication.java
+│   │   ├── resources/
+│   │   │   ├── static/
+│   │   │   │   ├── css/
+│   │   │   │   │   └── styles.css
+│   │   │   │   ├── js/
+│   │   │   │   │   └── script.js
+│   │   │   │   └── images/
+│   │   │   │       └── logo.png
+│   │   │   ├── templates/
+│   │   │   │   ├── patient/
+│   │   │   │   │   ├── register.html
+│   │   │   │   │   ├── profile.html
+│   │   │   │   │   ├── edit.html
+│   │   │   │   │   └── list.html
+│   │   │   │   ├── appointment/
+│   │   │   │   │   ├── book.html
+│   │   │   │   │   └── view.html
+│   │   │   │   ├── medication/
+│   │   │   │   │   ├── add.html
+│   │   │   │   │   ├── edit.html
+│   │   │   │   │   └── list.html
+│   │   │   │   └── index.html
+│   │   │   ├── application.properties
+│   │   │   └── data.sql
+│   │   └── webapp/
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── example/
+│                   ├── controller/
+│                   ├── service/
+│                   └── repository/
+├── pom.xml
+└── README.md
